@@ -1,0 +1,62 @@
+CHAP 1:
+The process of converting a data type to another is called type conversion.
+Implicit type conversion is when one data type is required (lets say...a float) and another is supplied (float x = 3, 3 is an int.)
+Explicit type conversion is required by using a cast operator like static_cast.
+
+Conversions do not change the data being converted but instead process the input and creates an output.
+
+When values are converted, a temporary object of the target type (int in float to int conversion) holds the result.
+
+The value of an object is held as a sequence of bits that the compiler interprets into meaningful values.
+
+Different data types express the same value differently in bits (Think of this like 0.5 vs 50%).
+
+The compiler can not copy the values of a certain data type without conversion, this will result in incorrect or
+unknown values.
+Implicit Type Conversions (ITC) are automatically processed by the compiler. It happens when:
+variables are initialized.
+Different data types in return values.
+Binary data types with binary operators.
+non-bools in boolean statements.
+different data types in function parameters.
+
+
+There are 5 general types of type conversions:
+Numeric promotions
+Numeric conversions
+Qualification conversions
+Value transformations
+Pointer conversions
+
+
+Type conversions fail if the inputted data type can not be converted to the output data type. (ex: string to int)
+Sometimes, specific features like brace initialization disallow conversions.
+
+
+CHAP 2:
+
+
+C++ has minimal size guarantees for the basic data types. But the actual size of the types vary based on the compiler and architecture (This was allowed for performance for ints and floats on different architectures).
+
+The number of bits a data type uses is called its width, wider data types use more bits, and narrower ones use less.
+Numeric promotion helps with performance like this when operating with narrower, slower values into wider and faster ones by converting them.
+
+Numeric promotions are safe and preserve values.
+
+
+Numeric promotions work with any data type that is smaller than the expected type.
+Type conversions prevent redundancy in writing code.
+
+CHAP 3:
+
+Numeric conversions are another type of conversion that convert the basic types into other types (ex:int to short)
+
+
+Numeric conversions are usually unsafe, however, a safe numeric conversion is value-preserving conversion (value of input can safely become output).
+
+The three types of numeric conversions are:
+1. Value-preserving conversion (safe)
+2. Reinterpretive conversion (unsafe because input is not the same as output)
+3. Lousy conversion (unsafe because input data can be lost in certain conversions float to int).
+
+Unsafe numeric conversions lead to unexpected results and should be generally be avoided.
