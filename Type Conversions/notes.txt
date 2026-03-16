@@ -57,6 +57,53 @@ Numeric conversions are usually unsafe, however, a safe numeric conversion is va
 The three types of numeric conversions are:
 1. Value-preserving conversion (safe)
 2. Reinterpretive conversion (unsafe because input is not the same as output)
-3. Lousy conversion (unsafe because input data can be lost in certain conversions float to int).
+3. Lousy conversion (unsafe because input data can be lost in certain conversions ex: float to int).
 
 Unsafe numeric conversions lead to unexpected results and should be generally be avoided.
+
+CHAP 4:
+
+A narrowing conversion is a potentially unsafe conversion where the output may not be able to hold the same
+value as the input (ex: float to int, double to float, int to float without being converted to safe constexpr, etc.).
+
+Best practice is to either use it intentionally and explicitly or avoid narrowing conversions all together.
+
+Best practice is to also use static_cast so it is explicit.
+
+Brace initialization does not allow narrowing conversions (without static_cast).
+
+Narrowing conversions are only considered narrowing conversions if the value of the input can not be represented in the output.
+
+It is better to use list/brace initialization with constexpr than use static_cast.
+
+
+
+CHAP 5:
+
+Arithmetic conversions are between variable initialization with two different types being operated on.
+(ex: int i = 3 + 4.5).
+
+When this happens, one of the operands will be converted to matching types executed by a set of rules called the usual arithmetic conversions.
+
+The matching type produced by the usual arithmetic conversions is called the common type.
+
+Binary operators that need the same type are:
+The binary arithmetic operators: +, -, *, /, %
+The binary relational operators: <, >, <=, >=, ==, !=
+The binary bitwise arithmetic operators: &, ^, |
+The conditional operator ?.
+
+The compiler has a ranked list of types, with int being the lowest and long double being the highest.
+long double, double, float, long long, long, int.
+
+Step 1:
+If one operand is a integral (int) type during a arithmetic conversion and the other is a float, the integral operand is converted to the type of the floating point (float) operand otherwise, any integral type is automatically promoted.
+
+
+Step 2:
+After being promoted, if one operand is signed and the other is not, more rules apply otherwise, the operand is converted to one of the higher rank.
+
+
+
+
+
