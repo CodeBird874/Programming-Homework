@@ -1,0 +1,242 @@
+CHAP 1:
+The process of converting a data type to another is called type conversion.
+Implicit type conversion is when one data type is required (lets say...a float) and another is supplied (float x = 3, 3 is an int.)
+Explicit type conversion is required by using a cast operator like static_cast.
+
+Conversions do not change the data being converted but instead process the input and creates an output.
+
+When values are converted, a temporary object of the target type (int in float to int conversion) holds the result.
+
+The value of an object is held as a sequence of bits that the compiler interprets into meaningful values.
+
+Different data types express the same value differently in bits (Think of this like 0.5 vs 50%).
+
+The compiler can not copy the values of a certain data type without conversion, this will result in incorrect or
+unknown values.
+Implicit Type Conversions (ITC) are automatically processed by the compiler. It happens when:
+variables are initialized.
+Different data types in return values.
+Binary data types with binary operators.
+non-bools in boolean statements.
+different data types in function parameters.
+
+
+There are 5 general types of type conversions:
+Numeric promotions
+Numeric conversions
+Qualification conversions
+Value transformations
+Pointer conversions
+
+
+Type conversions fail if the inputted data type can not be converted to the output data type. (ex: string to int)
+Sometimes, specific features like brace initialization disallow conversions.
+
+
+CHAP 2:
+
+
+C++ has minimal size guarantees for the basic data types. But the actual size of the types vary based on the compiler and architecture (This was allowed for performance for ints and floats on different architectures).
+
+The number of bits a data type uses is called its width, wider data types use more bits, and narrower ones use less.
+Numeric promotion helps with performance like this when operating with narrower, slower values into wider and faster ones by converting them.
+
+Numeric promotions are safe and preserve values.
+
+
+Numeric promotions work with any data type that is smaller than the expected type.
+Type conversions prevent redundancy in writing code.
+
+CHAP 3:
+
+Numeric conversions are another type of conversion that convert the basic types into other types (ex:int to short)
+
+
+Numeric conversions are usually unsafe, however, a safe numeric conversion is value-preserving conversion (value of input can safely become output).
+
+The three types of numeric conversions are:
+1. Value-preserving conversion (safe)
+2. Reinterpretive conversion (unsafe because input is not the same as output)
+3. Lousy conversion (unsafe because input data can be lost in certain conversions ex: float to int).
+
+Unsafe numeric conversions lead to unexpected results and should be generally be avoided.
+
+CHAP 4:
+
+A narrowing conversion is a potentially unsafe conversion where the output may not be able to hold the same
+value as the input (ex: float to int, double to float, int to float without being converted to safe constexpr, etc.).
+
+Best practice is to either use it intentionally and explicitly or avoid narrowing conversions all together.
+
+Best practice is to also use static_cast so it is explicit.
+
+Brace initialization does not allow narrowing conversions (without static_cast).
+
+Narrowing conversions are only considered narrowing conversions if the value of the input can not be represented in the output.
+
+It is better to use list/brace initialization with constexpr than use static_cast.
+
+
+
+CHAP 5:
+
+Arithmetic conversions are between variable initialization with two different types being operated on.
+(ex: int i = 3 + 4.5).
+
+When this happens, one of the operands will be converted to matching types executed by a set of rules called the usual arithmetic conversions.
+
+The matching type produced by the usual arithmetic conversions is called the common type.
+
+Binary operators that need the same type are:
+The binary arithmetic operators: +, -, *, /, %
+The binary relational operators: <, >, <=, >=, ==, !=
+The binary bitwise arithmetic operators: &, ^, |
+The conditional operator ?.
+
+The compiler has a ranked list of types, with int being the lowest and long double being the highest.
+long double, double, float, long long, long, int.
+
+Step 1:
+If one operand is a integral (int) type during a arithmetic conversion and the other is a float, the integral operand is converted to the type of the floating point (float) operand otherwise, any integral type is automatically promoted.
+
+
+Step 2:
+After being promoted, if one operand is signed and the other is not, more rules apply otherwise, the operand is converted to one of the higher rank.
+
+
+
+
+
+CHAP 6:
+
+casting operators can be used by the programmer to tell the compiler to preform a certain type conversion. 
+
+the 5 casting operators are:
+static_cast  conversions at complie-time. (safe)
+dynamic_type conversions at run-time with pointers. (safe) 
+const_cast removes or adds const. (not safe)
+reinterpret_cast reinterprets at the bit level assuming it is a different type. (unsafe)
+C-style casts mix of const, reinterpret, and static_cast. (unsafe)
+
+C-style cast example:
+
+int x = 5;
+
+std:cout << (double)x << "\n";
+
+static_cast example:
+// prints 2.1
+int x = 4.1;
+
+int y = 2;
+
+std::cout << static_cast <double>(x) << "\n";
+
+
+
+static_cast will fail if the compiler does not know how to preform the conversion, and is weaker than C-style casting.
+
+
+static_cast is best used for explicit narrow conversions, and the programmer accepts the possible data loss that comes with it.
+
+
+
+
+CHAP 7:
+
+using is a keyword that an alias for an existing data type. The compiler automatically subsitutes the alias with its type.
+
+example:
+using integer = int; 
+
+
+The types of common (yet inconsistent) alias types are:
+type aliases that end in _t, inherited from C and not used in modern C++ as much.
+ex: size_t, nullptr_t.
+type aliases that end in _type, but inconsistent, as some type aliases don't use these at all.
+ex: std::string::size_type.
+
+Type aliases that use no suffix.
+
+Prefered in modern c++, using a uppercase letter for the type alias makes it clear that is is an alias.
+ex:
+Integer x;
+
+
+Preferably, use the modern c++ style.
+
+Type aliases are not distinct types, this can lead to meaningless code that is type unsafe.
+
+IMPORTANT: Type aliases fall in a scope just like variable indentifiers, and can only be used in a scope.
+
+To use a type alias in multiple files, use a header
+
+Typedefs are an older way of defining a alias type, it is better to use type alises instead.
+
+ex: 
+typedef float Float;
+using Float = float;
+
+
+type aliases are best used for platform independent coding, where types are different sizes, and to improve code clarity.
+
+
+
+
+CHAP 8:
+
+Type deductions are a feature that allow compilers to deduce the type of a variable based on it's 
+initializer (ex: int x = 4; the initializer is 4).
+
+The auto keyword invokes type deduction and can be used instead of the variables type.
+(ex: int x = 4 becomes auto x = 4)
+
+Type deductions can be used for arithmetic operations initialization, functions, and variables that are 
+equal to other variables.
+
+Type deduction does not work for empty/missing initializers. 
+
+Type deductions usually remove const, in cases where a variable gets its value from another variable.
+
+(ex: const int foo = 45;
+      // no more const.
+      auto bar = foo; 
+      )
+
+To fix the removed const, add const before auto (const will be returned after being dropped).
+
+std::string does not work well with auto, and it will be deduced as an incorrct type. (char* instead of string).
+
+
+Type deduction prevents uninitialized variables, increases readability, and removes performance-heavy conversions.
+
+
+
+CHAP 9:
+
+
+Type conversions in functions are deduced based off of the return statements in a function.
+
+If a function has return statements of different types, an error will occur.
+
+Return type deductions prevents errors from two different types from occurring.
+
+auto can be used to simplfy the return types of functions.
+
+Forward declarations are not possible with functions with an auto return type.
+
+Returning trail syntax defines the return type in a function using its parameters.
+ex:
+
+auto foo(int x, int y,){
+    return x + y;
+    // int in the parameters will be deduced with no issues.
+  }
+
+Auto keyword does not work with parameter types. Instead, function templates can be used.
+
+Be explicit when defining return types in functions to prevents errors, or use trailing return syntax.
+
+
+
+
