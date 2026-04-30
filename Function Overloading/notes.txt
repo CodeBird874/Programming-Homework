@@ -1,0 +1,391 @@
+Function overloading allows you to create multiple functions with the same as long as the function has different 
+parameter types.
+
+A function sharing a name in the same scope is called and overloaded function.
+
+example of overloaded function:
+
+char enterInput (char input){
+    std::cout << input << std::endl;
+  }
+
+string enterInput(string input){
+    std::cout << input std::endl;
+  }
+
+
+
+If the overloaded function can be differentiated by the compiler, errors will not occur.
+
+When the compiler has to discern between an overloaded function, it will try to find the proper overload based on 
+the type of arguments. This is called overload resolution.
+
+
+Function overloading is best used to make programs simple.
+
+CHAP 2:
+
+
+
+
+Overloaded functions are differentiated by the type of parameters, and the number of parameters, not by return type.
+
+Number of parameters example:
+int add(int x, int y)
+{
+    return x + y;
+}
+
+int add(int x, int y, int z)
+{
+    return x + y + z;
+} // compiler will be able to find the difference between the two when the function is called.
+
+
+
+Type of parameter example:
+float add(float x, float y){
+    return x + y
+  }
+
+
+int add(float x, float y){
+    return x + y
+  }
+
+
+Const and typedefs are not considered in overloading differentiation.
+
+
+Return types fail because they are not considered in differentiation, only parameters.
+
+
+A functions type signature (or just signature) is defined by the parts of the function used for differentiation.
+Type signatures include names, parameters, but not return type.
+
+
+The compiled name of a overloaded function will be changed with a process called name mangling.
+
+
+Name mangling is decided on parameters, or type of parameters, and has no standardization.
+
+
+CHAP 3:
+
+
+Whenever a function call is made, the compiler must find the matching function declaration.
+
+With non-overloading functions, only one function matches the call.
+
+
+When the compiler needs to resolve overloaded function calls, it goes through a sequence of rules to make sure 
+any of the calls are the best match.
+
+The compiler applies different type conversions to the arguments in a function call, checking if the overloaded is a match.
+
+After this process, the compiler arrives at three possible outcomes.
+
+The three possible outcomes are:
+No matching functions found. (Moves to next step in sequence)
+A single matching function was found. (Compiler finishes search)
+More than one matching function was found (throw error)
+
+If the compiler fails to find a match with all the sequences, it will through a compile error.
+
+Step 1: compiler tries to find an exact match, with arguments in the function call matching the overloaded function's parameters.
+Next, compiler preforms trivial conversions, that modify types (without modifying value) to find a match.
+Conversions are lvalue to rvalue connversions, qualification conversions (const to non-const) and non-reference to reference conversions. These are also considered exact matches.
+
+
+
+Step 2: If no match is found, the compiler preforms numeric promotions (ex: bool to int)
+
+Step 3: If no match is found with numeric promotions, the compiler will go through numeric conversions (ex: double to int)
+
+Step 4: If no match was made with numeric promotions, the compiler tries to convert with user-defined conversions.
+
+Step 2 takes priority over Step 3.
+
+
+More than one function match happens when a type that can not be promoted has two possible ways of being converted (ex: long to int or float).
+
+To prevent this, it is best to define the function with the wanted type.
+
+
+CHAP 4:
+
+It is possible to delete a function to prevent it from behaving incorrectly.
+
+EXAMPLE:
+
+void printString(std:string str)
+
+void printString(int) = delete; // if this matches compiler will throw an error.
+
+Delete keyword does not mean it will be deleted, it means that the compiler prevents this behavior.
+
+To delete all non-matching functions, it is ideal to use a typename.
+
+template <typename T>
+
+void printstring(T x) = delete;
+
+
+
+
+
+CHAP 5:
+
+A default argument is a default value defined for a function parameter.
+
+example:
+
+std::string printOutput(std::string str="String"){
+std::cout << "Entered string: " << str << std::endl;
+  }
+
+
+When making call, if the caller does not provide an argument, the value of the default argument is used.
+
+Default arguments are handled by the compiler at the call site (when the function is called in the code.)
+
+Default arguments are used often in code, and can be used for sane defaults that can be overridden.
+
+A parameter with a default set is sometimes called an optional parameter (term should be avoided for clarity, as other types of parameters are also called this.)
+
+Default parameters  prevent function calls from breaking.
+
+Three default parameters can exist in a function, however, leftmost parameter arguments can not be skipped or defaulted.
+example:
+
+print(x="Hello" y="Goodbye" z="Have a nice day!") 
+// X can not be given a default argument.
+
+
+Default arguments must apply to either all or none of all parameters in a function including declaration.
+ex:
+
+print(x y="Goodbye" z="Have a nice day!") 
+
+// not allowed.
+
+Default arguments can not be declared twice, and can not be defined with a latter forward declare.
+
+Best practice is to place function definitions in a  header file.
+
+Default arguments can be overloaded.
+
+
+Because default arguments are not part of a function signature, ambiguous function matches can occur.
+
+
+
+CHAP 6:
+
+Templates are designed to simplify the process of creating different functions to work with different data types.
+Templates help with the DRY principle.
+
+A template definition describes what a function or class can be, and can use placeholder types. After it is defined, the compiler creates the overloaded functions itself.
+
+Because template types aren't determined until it is used in the program, programmers do not have to define edgecases and guard rails for every single possible type.
+
+Templates also work with future types, making them future proof.
+
+A function template is a function-like definition that is used to generate overloaded functions with a different set of actual types.
+
+The initial template described is called the primary template.
+
+Functions generated from the primary template are called instantiated functions.
+
+Placeholder types (or type template parameters) are used for any type that will be specified later.
+
+A template parameter declaration defines template parameters that will be used in the future.
+
+The scope of a template parameter is limited to the function template.
+
+example of defining a template:
+
+template <typename T>
+
+T printAdded(T x, T y){
+    std::cout << "Printing added: " << x + y << std::endl; 
+
+  }
+
+
+
+Using the class keyword is exactly the same as using typename when defining, but typename is preferred as it is clearer to read.
+
+If template parameters have simple use cases, name them with a capital T, U, or V. Otherwise, name them captial T with the specific type expressed.
+
+
+
+CHAP 7:
+
+Function templates are not compiled or executed directly, They are only used to generate functions.
+
+
+When the compiler encounters a function call that  does not already exist for the function, it will use the user-defined template to create the call. 
+
+
+This is called function template instantiation.
+
+
+A function created from FTI is called a function instance/specialization.
+
+The template used in instantiation is called the primary template.
+
+
+The compiler swaps the template with the specified type in this process.
+
+ex:
+
+T max() -> int max() // compiler creates the function from the template.
+
+max<int>(1, 2) // called function here
+
+
+A function template is only instantiated once for each translation unit.
+
+Additional calls are rerouted to the already instantiated function.
+
+If a function call is not made for the template, it will not be instantiated in the translation unit.
+
+Specifying what type you want is not required, the compiler can deduce the type and create the matching instance.
+
+example:
+
+max<>(1, 2) // calls max<int>(int, int) non-template function not considered
+
+max(1,2) // calls max(int, int) (recommended)
+
+max<int>(1, 2) // calls max<int>(int, int)
+However, the second case creates a template and non-template function, the compiler prefers the latter.
+
+
+When the compiler looks for another function that is not used as a template with a specific type, it will be ignored.
+
+ex:
+
+max<>() will only look for function templates.
+
+The middle called function is preferred.
+
+
+The compiler will create a function template even if it doesn't make sense semantically, this can result in errors.
+
+
+Function templates can also have default parameters, but only for non-template parameters.
+
+When a static local variable is used in a function template, each instantiated function has a different
+static variable.
+
+
+
+Although templates can slow down compile times, they are good for preventing repeated tasks and created generic functions.
+
+
+
+CHAP 8:
+
+A template variable can only represent one type in a function.
+
+Type conversion is only used for resolving function overloads, which is why errors occur when using two different
+types.
+
+There are three ways to resolve and add multiple types to a function. 
+
+Using static_cast prevents this error and allows you to use multiple types, but is hard to read.
+
+std::cout << function(static_cast<double>(2), 4); // hard to read.
+
+Explicitly defining the function for the specified type resolves this error, but will not preform a type conversion as if it were a template.
+
+ex:
+
+double function(double x, double y); // solves issue, but is not an actual template.
+
+
+Explicitly  defining type when calling a function template resolves the issue, but is manual.
+
+ex:
+function<double>(2, 2.5);
+
+
+
+To solve this, you can declare a function with two template parameters.
+
+ex:
+
+#include <iostream>
+
+template <typename T, typename U>
+
+T function(T x, U y);
+
+
+However, narrowing conversions occur if you declare this primary template and return it with a 
+conditional operator.
+
+Additionally, the compiler will return the type of whatever was placed to the right of the conditional operator.
+
+Declaring via auto will fix this problem.
+
+
+In C++20, the compiler automatically converts a function into a function template with independent parameters as long as the auto keyword is used this is called an abbreviated function template.
+
+ex:
+
+auto function(auto x, auto y); // abbreviated function template here.
+
+template <typename T, typename U>
+
+auto function(T x, U y) // what is used before.
+
+
+Abbreviated function templates are preferred if you want independent function types (C++20 only).
+
+Finally, function templates can also be overloaded into having extra parameters.
+
+In a hypothetical situation where multiple overloaded function templates exist. The compiler will choose a
+perfect match.
+
+The rule the compiler executes is called the partial ordering of templates.
+
+If this can not be resolved, the compiler throws an ambiguous match error.
+
+
+
+
+
+CHAP 9:
+
+A non-type template parameter is a template parameter with a fixed type reserved as a placeholder for a constexpr
+value passed in as a template argument.
+
+A non-type template type can be:
+An integral type.
+An enumeration type.
+std::nullptr_t
+A pointer or reference to an object.
+A pointer or reference to a function.
+A pointer or reference to a member function.
+and a literal class type.
+
+
+You can define a non-type template parameter by declaring it within the angle brackets that hold the type. 
+
+
+Example:
+
+template <float F>
+
+void print(){
+    std::cout << F std::endl;
+  }
+
+
+int main(){
+
+    print<4.3>(); // 4.3 is the non-type template parameter.
+  }
